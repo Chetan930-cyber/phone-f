@@ -1,0 +1,116 @@
+import React, { useEffect, useState } from "react";
+import BackButton from "../BackButton";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Loading from "../Loading";
+import {  closeComplaint, getComplaint } from "../../features/complaints/complaintSlice";
+import { useParams } from "react-router-dom";
+import { createNote, getNotes } from "../../features/notes/noteSlice";
+
+const SingleComplaint = () => {
+  const [ text, setText] = useState("")
+  const { user } = useSelector((state) => state.auth);
+  const{complaint, isLoading, isError , message} = useSelector((state) => state.complaints);
+  const{notes, isLoading:noteLoading, isError:noteError, message: noteErrorMessage} = useSelector((state) => state.notes)
+  const {id} = useParams();
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    dispatch(createNote({id:id, text:text}));
+    setText("")
+  };
+
+  const handleCloseComplaint = (e) =>{
+dispatch(closeComplaint(id))
+  }
+
+  useEffect(() =>{
+   dispatch(getComplaint(id));
+   dispatch(getNotes(id))
+
+   if ((isError && message) || (noteError && noteErrorMessage)){
+     toast.error(message);
+   }
+  },[isError, message]);
+
+  if(isLoading || noteLoading){
+   return <Loading/>
+  };
+  
+  return (
+    <div className="container mx-auto p-10 bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen">
+      <BackButton url={user.access?"/admin/complaints":"/complaints"} />
+
+      <div className="border rounded-md p-5 my-5 flex items-center justify-between bg-white shadow-md transition-transform transform hover:scale-105">
+        <span>
+          <h1 className="text-2xl font-bold my-3 text-blue-600">Device: {complaint.model}</h1>
+          <h2 className="text-lg my-3 text-gray-800">Date: 12-Dec-24</h2>
+          <p className="text-sm my-3 text-gray-700">Serial No.: {complaint.serial_number}</p>
+          <p className="my-3">
+            Status:
+            <span className={complaint.status === 'closed' ?"bg-red-600 text-white py-1 hover:bg-green-700 px-3 rounded-full font-semibold":"bg-green-600 text-white py-1 hover:bg-green-700 px-3 rounded-full font-semibold"}>
+                      {complaint.status}
+                    </span>
+          </p>
+          <p className="text-sm my-3 text-gray-700 font-bold max-w-sm">
+          {complaint.description}
+          </p>
+        </span>
+        <img
+          className="h-56 rounded-lg border shadow-sm"
+          src={complaint.product_image}
+          alt="iPhone"
+        />
+      </div>
+
+      <div className="p-5 border rounded-md bg-white shadow-lg">
+        <h2 className="text-lg font-semibold m-3 text-purple-600">Add Note</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={text}
+            name="text"
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Enter Note Here"
+            className="border p-3 w-full rounded-md placeholder:text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none transition"
+          />
+          <button className="my-3 bg-purple-500 text-white p-2 rounded-md w-full hover:bg-purple-700 transition duration-300">
+            Submit
+          </button>
+
+          <div className="my-3">
+           {
+            notes.map((note) =>{
+              return(
+<div key={note._id} className={
+                    note.isStaff
+                      ? "p-3 border rounded-md my-2 bg-slate-200"
+                      : "p-3 border rounded-md my-2"
+                  }>
+<h1 className="text-2xl font-bold my-1 text-blue-600">{note.text}</h1>
+<p className="text-sm text-gray-500 my-1">{note.user}</p>
+<p className="text-sm text-gray-500 my-1">{new Date(note.createdAt).toLocaleDateString("en-IN")}</p>
+</div>
+              )
+            })
+           }
+          </div>
+        </form>
+      </div>
+      <button
+        onClick={() => handleCloseComplaint(complaint._id)}
+        className="my-3 bg-red-500 w-full p-2 text-white rounded-md hover:bg-red-900 duration-200 disabled:bg-gray-600 hover:cursor:pointer"
+        disabled={complaint.status === "closed" ? true : false}
+      >
+        <p className="font-bold">
+          {complaint.status === "closed" ? "CLOSED" : "CLOSE COMPLAIN NOW"}
+        </p>
+      </button>
+    </div>
+  );
+};
+
+export default SingleComplaint;
+
+
