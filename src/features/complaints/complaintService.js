@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_URL = "/api/phone";
+// Use environment variable or fallback to the production URL
+const BASE_URL = import.meta.env.VITE_API_URL || "https://b-phone.onrender.com";
+const API_URL = `${BASE_URL}/api/phone`;
 
 const fetchComplaints = async (token) => {
   const options = {
@@ -20,7 +22,7 @@ const fetchComplaint = async (id, token) => {
     },
   };
 
-  const response = await axios.get(API_URL + "/" + id, options);
+  const response = await axios.get(`${API_URL}/${id}`, options);
   return response.data;
 };
 
@@ -35,18 +37,16 @@ const addComplaint = async (formData, token) => {
   return response.data;
 };
 
-const updateComplaint = async (id,token) => {
+const updateComplaint = async (id, token) => {
   const options = {
     headers: {
       authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.put(API_URL + "/" +id, {status:"closed"}, options);
+  const response = await axios.put(`${API_URL}/${id}`, {status: "closed"}, options);
   return response.data;
 };
-
-
 
 const complaintService = {
   fetchComplaints,
