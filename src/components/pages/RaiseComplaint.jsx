@@ -7,46 +7,48 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const RaiseComplaint = () => {
-  const { user } = useSelector(state => state.auth);
-  const { complaint, isSuccess, isError, message } = useSelector(state => state.complaints);
+  const {user,} = useSelector(state => state.auth);
+  const {complaint, isSuccess, isError, message} = useSelector(state => state.complaints)
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState({
-    model: "",
-    product_image: "",
-    serial_number: "",
-    description: "",
-  });
+  const navigate = useNavigate()
+  const [formData, setFormData ] = useState({
+model:"",
+product_image:"",
+serial_number:"",
+description: "",
+  })
 
-  const { model, product_image, serial_number, description } = formData;
+const{model,product_image,serial_number,description} = formData;
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+const handleChange = (e) =>{
+  setFormData({
+    ...formData,
+    [e.target.name] : e.target.value,
+  })
+}
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(raiseComplaint(formData));
-  };
+const handleSubmit = (e) =>{
+  e.preventDefault();
+  dispatch(raiseComplaint(formData))
+}
 
-  useEffect(() => {
-    if (isSuccess && complaint) {
-      navigate('/complaints');
-    }
-    if (isError && message) {
-      toast.error(message, {
-        theme: "dark",
-        position: "top-left",
-      });
-    }
-  }, [complaint, isSuccess, isError, message, navigate]);
+useEffect(() =>{
+if(  isSuccess && complaint ){
+  navigate('/complaints')
+
+  if (isError && message) {
+        toast.error(message, {
+          theme: "dark",
+          position: "top-left",
+        });
+      }
+}
+},[complaint,isSuccess,isError,message]);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-teal-400 via-blue-500 to-purple-600 flex items-center justify-center relative">
+      {/* Back Button */}
       <div className="absolute top-4 left-4">
         <BackButton
           url={"/"}
@@ -54,6 +56,7 @@ const RaiseComplaint = () => {
         />
       </div>
 
+      {/* Complaint Form with Moving Gradient Border */}
       <motion.div
         animate={{
           backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
@@ -74,41 +77,52 @@ const RaiseComplaint = () => {
             Raise Complaint
           </h2>
 
+          {/* Name input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Name
             </label>
             <input
               type="text"
               value={user.name}
-              readOnly
-              className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 transition-colors shadow-md"
+              id="name"
+              className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100 transition-colors shadow-md"
+              placeholder="Enter your name"
             />
           </div>
 
+          {/* Email input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <input
               type="email"
+              id="email"
               value={user.email}
-              readOnly
-              className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 transition-colors shadow-md"
+              className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100 transition-colors shadow-md"
+              placeholder="Enter your email"
             />
           </div>
 
+          {/* Select device options */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="device"
+              className="block text-sm font-medium text-gray-700"
+            >
               Device
             </label>
-            <select
-              name="model"
-              value={model}
-              onChange={handleChange}
+            <select name="model" value={model} onChange={handleChange}
+              id="device"
               className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100 transition-colors shadow-md"
             >
-              <option value="">Select Device</option>
               <option value="iPhone">iPhone</option>
               <option value="iPad">iPad</option>
               <option value="Macbook">Macbook</option>
@@ -117,52 +131,60 @@ const RaiseComplaint = () => {
             </select>
           </div>
 
+          {/* Image URL input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="imageURL"
+              className="block text-sm font-medium text-gray-700"
+            >
               Image URL
             </label>
-            <input
-              name="product_image"
-              value={product_image}
-              onChange={handleChange}
+            <input name="product_image" value={product_image} onChange={handleChange}
               type="text"
+              id="imageURL"
               className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100 transition-colors shadow-md"
               placeholder="Enter image URL"
             />
           </div>
 
+          {/* Serial number input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="serial_number"
+              className="block text-sm font-medium text-gray-700"
+            >
               Serial Number
             </label>
             <input
               type="text"
-              name="serial_number"
-              value={serial_number}
-              onChange={handleChange}
+              name="serial_number" value={serial_number} onChange={handleChange}
+              id="serial_number"
               className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100 transition-colors shadow-md"
-              placeholder="Enter serial number"
+              placeholder="Serial Number"
             />
           </div>
 
+          {/* Issue description textarea */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="issue_description"
+              className="block text-sm font-medium text-gray-700"
+            >
               Describe your issue
             </label>
             <textarea
-              name="description"
-              value={description}
-              onChange={handleChange}
+            name="description" value={description} onChange={handleChange}
+              id="issue_description"
               className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-100 transition-colors shadow-md"
               placeholder="Describe your issue"
-              rows="4"
             ></textarea>
           </div>
 
+          {/* Submit button */}
           <div>
             <button
               type="submit"
-              className="w-full py-3 px-6 bg-indigo-600 text-white font-semibold rounded-md shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 transition-colors"
+              className="w-full py-3 px-6 bg-indigo-600 text-white font-semibold rounded-md shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
             >
               Raise Complaint
             </button>

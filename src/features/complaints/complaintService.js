@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const API_URL = "/api/phone";
 
 const fetchComplaints = async (token) => {
@@ -33,16 +35,18 @@ const addComplaint = async (formData, token) => {
   return response.data;
 };
 
-const updateComplaint = async (id, token) => {
+const updateComplaint = async (id,token) => {
   const options = {
     headers: {
       authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.put(API_URL + "/" + id, {status:"closed"}, options);
+  const response = await axios.put(API_URL + "/" +id, {status:"closed"}, options);
   return response.data;
 };
+
+
 
 const complaintService = {
   fetchComplaints,
