@@ -13,32 +13,35 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`py-4 shadow-lg flex items-center justify-between px-4 sm:px-6 md:px-12 ${
-        user?.access ? "bg-[#0d1010] text-white" : "bg-[#edf6f9]"
+      className={`py-4 shadow-lg flex items-center justify-between px-4 sm:px-8 md:px-12 lg:px-16 transition-all duration-300 ${
+        user?.access ? "bg-gradient-to-r from-gray-900 to-gray-800 text-white" : "bg-gradient-to-r from-blue-50 to-cyan-50"
       }`}
     >
       <Link to={"/"}>
-        <h1 className="text-xl sm:text-2xl font-bold">Phone Repair</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold transition-all duration-300 hover:scale-105">
+          Phone Repair
+        </h1>
       </Link>
 
-      {/* Logo Image */}
-      <span>
-        <img
-          className="hidden sm:block lg:w-[85px] lg:h-[40px] h-[50px] w-[90px] rounded-sm border-4 border-green-400 hover:border-blue-400 transition-all"
-          src="/j.png" // Ensure the image path is correct and accessible from the public folder
-          alt="Phone Repair Logo"
-        />
-      </span>
+      {/* Logo Image - Wrapped inside Link */}
+      <Link to={"/"}>
+        <div className="absolute left-1/2 transform -translate-x-1/2 sm:static sm:translate-x-0 sm:flex sm:justify-center">
+          <img
+            className="hidden sm:block h-10 w-20 md:h-12 md:w-24 lg:h-14 lg:w-28 rounded-md border-4 border-green-400 hover:border-blue-400 transition-all duration-300 hover:scale-105 shadow-md"
+            src="/j.png"
+            alt="Phone Repair Logo"
+          />
+        </div>
+      </Link>
 
       {/* Navbar Buttons */}
-      <span className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-        {/* If user is null (not logged in), show Login and Register buttons */}
+      <div className="flex flex-row items-center gap-2 sm:gap-4">
         {!user ? (
           <>
             <Link to={"/Login"}>
               <button
                 type="button"
-                className="text-gray-900 h-[40px] sm:h-[45px] bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-lime-200 font-medium rounded-md text-xs sm:text-sm md:text-md px-4 sm:px-5 py-2 text-center"
+                className="text-gray-900 h-10 sm:h-11 md:h-12 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:scale-105 focus:ring-4 focus:outline-none focus:ring-lime-200 font-medium rounded-md text-xs sm:text-sm px-3 sm:px-5 py-2 text-center transition-all duration-300 shadow-md"
               >
                 Login
               </button>
@@ -47,23 +50,22 @@ const Navbar = () => {
             <Link to={"/Register"}>
               <button
                 type="button"
-                className="text-white h-[40px] sm:h-[45px] bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-md text-xs sm:text-sm md:text-md px-4 sm:px-5 py-2 ring-4 ring-white text-center"
+                className="text-white h-10 sm:h-11 md:h-12 bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl hover:scale-105 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-md text-xs sm:text-sm px-3 sm:px-5 py-2 ring-2 ring-white text-center transition-all duration-300 shadow-md"
               >
                 Register
               </button>
             </Link>
           </>
         ) : (
-          // If user is logged in, show Logout button
           <button
             onClick={handleLogOut}
             type="button"
-            className="text-white h-[40px] sm:h-[45px] bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 font-medium rounded-md text-xs sm:text-sm md:text-md px-4 sm:px-5 py-2 ring-4 ring-white text-center"
+            className="text-white h-10 sm:h-11 md:h-12 bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl hover:scale-105 focus:ring-4 focus:outline-none focus:ring-pink-200 font-medium rounded-md text-xs sm:text-sm px-3 sm:px-5 py-2 ring-2 ring-white text-center transition-all duration-300 shadow-md"
           >
             Logout
           </button>
         )}
-      </span>
+      </div>
     </nav>
   );
 };
