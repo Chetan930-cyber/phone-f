@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const API_URL = "/api/phone"
-
-
+// Use environment variable or fallback to the production URL
+const BASE_URL = import.meta.env.VITE_API_URL || "https://b-phone.onrender.com";
+const API_URL = `${BASE_URL}/api/phone`;
 
 const fetchNotes = async(id, token) =>{
     let options = {
